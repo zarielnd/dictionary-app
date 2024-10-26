@@ -50,7 +50,7 @@ public class RequestManager {
         }
     }
     public interface CallDictionary {
-        @GET("/entries/en/{word}")
+        @GET("entries/en/{word}")
         Call<List<APIResponse>> callMeanings(@Path("word") String word);
     }
 }

@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.PRM391.dictionaryapp.Adapter.MeaningAdapter;
 import com.PRM391.dictionaryapp.Adapter.PhoneticAdapter;
 import com.PRM391.dictionaryapp.Model.APIResponse;
-import com.PRM391.dictionaryapp.Model.Phonetics;
 
 public class MainActivity extends AppCompatActivity {
     SearchView searchView;
@@ -32,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         meaning = findViewById(R.id.meanings);
         recyclerView_phonetics = findViewById(R.id.RVPhonetics);
         recyclerView_meanings = findViewById(R.id.RVMeanings);
+    }
+    private void bindingAction(){
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Loading....");
         progressDialog.show();
         RequestManager requestManager = new RequestManager(MainActivity.this);
         requestManager.getWordMeanings(listner,"hello");
-    }
-    private void bindingAction(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

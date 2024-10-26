@@ -38,10 +38,12 @@ public class DefitionsAdapter extends RecyclerView.Adapter<DefitionsAdapter.Defi
         }else{
             holder.example.setText("Example: "+definitionsList.get(position).getExample());
         }
+
         StringBuilder synonyms = new StringBuilder();
         StringBuilder antonyms = new StringBuilder();
         synonyms.append(definitionsList.get(position).getSynonyms());
         antonyms.append(definitionsList.get(position).getAntonyms());
+
         holder.synonyms.setText(synonyms);
         holder.antonyms.setText(antonyms);
         holder.synonyms.setSelected(true);
@@ -51,7 +53,7 @@ public class DefitionsAdapter extends RecyclerView.Adapter<DefitionsAdapter.Defi
 
     @Override
     public int getItemCount() {
-        return 0;
+        return definitionsList.size();
     }
 
     public class DefitionViewHolder extends RecyclerView.ViewHolder{
