@@ -2,10 +2,13 @@ package com.PRM391.dictionaryapp;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
@@ -96,5 +99,40 @@ public class MainActivity extends AppCompatActivity {
         });
         bindingView();
         bindingAction();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item,menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==R.id.menu_language){
+            Toast.makeText(MainActivity.this,"select language",Toast.LENGTH_SHORT);
+            return true;
+        }
+        if (item.getItemId()==R.id.menu_language_english){
+            Toast.makeText(MainActivity.this,"select english",Toast.LENGTH_SHORT);
+            return true;
+        }
+        if (item.getItemId()==R.id.menu_language_vietnamese){
+            Toast.makeText(MainActivity.this,"select vietnamese",Toast.LENGTH_SHORT);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+//        switch (item.getItemId()) {
+//            case R.id.menu_language:
+//                Toast.makeText(MainActivity.this,"select langage",Toast.LENGTH_SHORT);
+//                return true;
+//            case R.id.menu_language_english:
+//                Toast.makeText(MainActivity.this,"select langage",Toast.LENGTH_SHORT);
+//                return true;
+//            case R.id.menu_language_vietnamese:
+//                Toast.makeText(MainActivity.this,"select langage",Toast.LENGTH_SHORT);
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
     }
 }
