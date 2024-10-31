@@ -1,7 +1,10 @@
 package com.PRM391.dictionaryapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -20,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.PRM391.dictionaryapp.Adapter.MeaningAdapter;
 import com.PRM391.dictionaryapp.Adapter.PhoneticAdapter;
 import com.PRM391.dictionaryapp.Model.APIResponse;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     SearchView searchView;
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private void showData(APIResponse apiResponse){
-        word.setText("Word:- "+apiResponse.getWord());
+        word.append(" "+apiResponse.getWord());
         recyclerView_phonetics.setHasFixedSize(true);
         recyclerView_phonetics.setLayoutManager(new GridLayoutManager(this,1));
         phoneticAdapter = new PhoneticAdapter(this,apiResponse.getPhonetics());
@@ -114,10 +119,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if (item.getItemId()==R.id.menu_language_english){
             Toast.makeText(MainActivity.this,"select english",Toast.LENGTH_SHORT);
+            setLocal("en");
             return true;
         }
         if (item.getItemId()==R.id.menu_language_vietnamese){
             Toast.makeText(MainActivity.this,"select vietnamese",Toast.LENGTH_SHORT);
+            setLocal("vi");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -134,5 +141,21 @@ public class MainActivity extends AppCompatActivity {
 //            default:
 //                return super.onOptionsItemSelected(item);
 //        }
+    }
+
+    private void setLocal(String langCode){
+        Locale locale = new Locale(langCode);
+        LocaleList localeList = new LocaleList(locale);
+        LocaleList.setDefault(localeList);
+        Configuration config = new Configuration();
+        config.setLocales(localeList);
+        getBaseContext().createConfigurationContext(config);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        getSharedPreferences("Settings", MODE_PRIVATE)
+                .edit()
+                .putString("Language", langCode)
+                .apply();
+
+        recreate();
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Từ điển</string>
+    <string name="word">Từ: </string>
+    <string name="meanings">Ý nghĩa</string>
+    <string name="synonyms">Đồng nghĩa</string>
+    <string name="example">Ví dụ: </string>
+    <string name="definition">Định nghĩa: </string>
+    <string name="antonyms">Trái nghĩa</string>
+    <string name="search_words">Tìm từ..</string>
+    <string name="no_example_avaliable"> Không có ví dụ</string>
+    <string name="exclanatory">Từ loại:</string>
+</resources>

@@ -33,7 +33,7 @@ public class MeaningAdapter extends RecyclerView.Adapter<MeaningAdapter.MeaningV
 
     @Override
     public void onBindViewHolder(@NonNull MeaningAdapter.MeaningViewHolder holder, int position) {
-        holder.textView_phonetics.setText("Part of speech:- "+meaningsList.get(position).getPartOfSpeech());
+        holder.textView_phonetics.append(" "+meaningsList.get(position).getPartOfSpeech());
         holder.recyclerView_defitions.setHasFixedSize(true);
         holder.recyclerView_defitions.setLayoutManager(new GridLayoutManager(context,1));
         DefitionsAdapter defitionsAdapter = new DefitionsAdapter(context,meaningsList.get(position).getDefinitions());

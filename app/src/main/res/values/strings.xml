@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Dictionary APP</string>
+    <string name="word">Word:</string>
+    <string name="meanings">Meanings</string>
+    <string name="synonyms">Synonyms</string>
+    <string name="example">Example:</string>
+    <string name="definition">Definition:</string>
+    <string name="antonyms">Antonyms</string>
+    <string name="search_words">Search words..</string>
+    <string name="no_example_avaliable">" No Example avaliable"</string>
+    <string name="exclanatory">Exclanatory</string>
 </resources>

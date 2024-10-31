@@ -19,16 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/red"
-            app:cardElevation="8dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dictionary App"
-                android:textStyle="bold|italic"
-                android:textColor="@color/white"
-                android:textSize="24dp"
-                android:padding="10dp"/>
-        </androidx.cardview.widget.CardView>
+            app:cardElevation="8dp"/>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +32,7 @@
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:defaultQueryHint="Search words.."
+                app:defaultQueryHint="@string/search_words"
                 app:iconifiedByDefault="false" />
         </androidx.cardview.widget.CardView>
         <LinearLayout
@@ -53,12 +44,12 @@
                 android:id="@+id/textView_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Word"
+                android:text="@string/word"
                 android:textColor="@color/red"
                 android:textAlignment="center"
                 android:layout_gravity="center"
                 android:padding="8dp"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="italic|bold"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RVPhonetics"
@@ -68,7 +59,7 @@
                 android:id="@+id/meanings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Meanings"
+                android:text="@string/meanings"
                 android:textColor="@color/red"
                 android:textAlignment="center"
                 android:layout_gravity="center"
