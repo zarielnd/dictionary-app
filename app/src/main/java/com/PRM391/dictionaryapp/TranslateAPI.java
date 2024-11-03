@@ -74,6 +74,37 @@ public class TranslateAPI {
         });
     }
 
+    public static String getTranslatedWord(String textToTranslate, String targetLang) {
+        final String[] result = {null};
+        final boolean[] done = {false};
+
+        translate(textToTranslate, targetLang, new TranslationCallback() {
+            @Override
+            public void onSuccess(String translatedText) {
+                result[0] = translatedText;
+                done[0] = true;
+            }
+
+            @Override
+            public void onError(String error) {
+                result[0] = "Translation Error";
+                done[0] = true;
+            }
+        });
+
+        // Wait for translation to complete
+        while (!done[0]) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        return result[0];
+    }
+
     public interface TranslationCallback {
         void onSuccess(String translatedText);
         void onError(String error);

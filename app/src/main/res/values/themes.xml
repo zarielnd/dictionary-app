@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.DictionaryAPP" parent="Base.Theme.DictionaryAPP" />
+    <style name="Theme.DictionaryAPP." parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Other theme attributes -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

@@ -1,17 +1,18 @@
 package com.PRM391.dictionaryapp;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
@@ -23,22 +24,43 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.PRM391.dictionaryapp.Adapter.MeaningAdapter;
 import com.PRM391.dictionaryapp.Adapter.PhoneticAdapter;
 import com.PRM391.dictionaryapp.Model.APIResponse;
+import com.PRM391.dictionaryapp.Model.SavedWord;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String PREF_SAVED_WORDS = "saved_words";
+    private final Gson gson = new Gson();
+
+    private String currentWord;
+    private String translatedWord;
+
     SearchView searchView;
     TextView word, meaning;
     RecyclerView recyclerView_phonetics, recyclerView_meanings;
     ProgressDialog progressDialog;
     PhoneticAdapter phoneticAdapter;
     MeaningAdapter meaningAdapter;
-    private void bindingView(){
+    private void bindingView() {
         searchView = findViewById(R.id.search_view);
         word = findViewById(R.id.textView_word);
         meaning = findViewById(R.id.meanings);
         recyclerView_phonetics = findViewById(R.id.RVPhonetics);
         recyclerView_meanings = findViewById(R.id.RVMeanings);
+        Button saveButton = findViewById(R.id.btn_save_word);
+
+        saveButton.setOnClickListener(v -> {
+            String englishWord = currentWord; // Your current word
+            String vietnameseWord = translatedWord; // Your translated word
+            if (englishWord != null && !englishWord.isEmpty() &&
+                    vietnameseWord != null && !vietnameseWord.isEmpty()) {
+                saveWordPair(englishWord, vietnameseWord);
+            }
+        });
     }
     private void bindingAction(){
         progressDialog = new ProgressDialog(this);
@@ -53,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.show();
                 RequestManager requestManager = new RequestManager(MainActivity.this);
                 requestManager.getWordMeanings(listner,query);
+
                 return true;
             }
 
@@ -80,7 +103,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private void showData(APIResponse apiResponse){
+        word.setText(R.string.word);
         word.append(" "+apiResponse.getWord());
+
+        currentWord = apiResponse.getWord();
+        // For now, set translated word to the same value - you'll need to implement actual translation
+        translatedWord = TranslateAPI.getTranslatedWord(currentWord, "vi");
+
         recyclerView_phonetics.setHasFixedSize(true);
         recyclerView_phonetics.setLayoutManager(new GridLayoutManager(this,1));
         phoneticAdapter = new PhoneticAdapter(this,apiResponse.getPhonetics());
@@ -113,17 +142,22 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_saved_words) {
+            Intent intent = new Intent(this, SavedWordsActivity.class);
+            startActivity(intent);
+            return true;
+        }
         if (item.getItemId()==R.id.menu_language){
-            Toast.makeText(MainActivity.this,"select language",Toast.LENGTH_SHORT);
+            Toast.makeText(MainActivity.this,"select language",Toast.LENGTH_SHORT).show();
             return true;
         }
         if (item.getItemId()==R.id.menu_language_english){
-            Toast.makeText(MainActivity.this,"select english",Toast.LENGTH_SHORT);
+            Toast.makeText(MainActivity.this,"select english",Toast.LENGTH_SHORT).show();
             setLocal("en");
             return true;
         }
         if (item.getItemId()==R.id.menu_language_vietnamese){
-            Toast.makeText(MainActivity.this,"select vietnamese",Toast.LENGTH_SHORT);
+            Toast.makeText(MainActivity.this,"select vietnamese",Toast.LENGTH_SHORT).show();
             setLocal("vi");
             return true;
         }
@@ -157,5 +191,19 @@ public class MainActivity extends AppCompatActivity {
                 .apply();
 
         recreate();
+    }
+
+    private void saveWordPair(String englishWord, String vietnameseWord) {
+        SharedPreferences prefs = getSharedPreferences(PREF_SAVED_WORDS, MODE_PRIVATE);
+        String wordsJson = prefs.getString("word_pairs", "[]");
+
+        Type type = new TypeToken<ArrayList<SavedWord>>(){}.getType();
+        ArrayList<SavedWord> savedWords = gson.fromJson(wordsJson, type);
+
+        savedWords.add(new SavedWord(englishWord, vietnameseWord));
+        String updatedJson = gson.toJson(savedWords);
+
+        prefs.edit().putString("word_pairs", updatedJson).apply();
+        Toast.makeText(this, "Word pair saved successfully!", Toast.LENGTH_SHORT).show();
     }
 }

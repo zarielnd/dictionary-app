@@ -9,4 +9,6 @@
     <string name="search_words">Search words..</string>
     <string name="no_example_avaliable">" No Example avaliable"</string>
     <string name="exclanatory">Exclanatory</string>
+    <string name="delete">Delete</string>
+    <string name="saved_words">Saved Words</string>
 </resources>

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item
+        android:id="@+id/menu_saved_words"
+        android:title="@string/saved_words"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menu_language"
         android:title="Language"
         android:icon="@drawable/icons8_earth_50">
         <menu>
+
             <item
                 android:id="@+id/menu_language_english"
                 android:title="English"
