@@ -25,6 +25,8 @@ import com.PRM391.dictionaryapp.Adapter.MeaningAdapter;
 import com.PRM391.dictionaryapp.Adapter.PhoneticAdapter;
 import com.PRM391.dictionaryapp.Model.APIResponse;
 import com.PRM391.dictionaryapp.Model.SavedWord;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -35,6 +37,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private static final String PREF_SAVED_WORDS = "saved_words";
     private final Gson gson = new Gson();
+    private FirebaseAuth mAuth;
 
     private String currentWord;
     private String translatedWord;
@@ -131,8 +134,20 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        mAuth = FirebaseAuth.getInstance();
         bindingView();
         bindingAction();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            // User not signed in, redirect to login
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 
     @Override
@@ -161,6 +176,10 @@ public class MainActivity extends AppCompatActivity {
             setLocal("vi");
             return true;
         }
+        if (item.getItemId() == R.id.menu_sign_out) {
+            signOut();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
 //        switch (item.getItemId()) {
 //            case R.id.menu_language:
@@ -175,6 +194,13 @@ public class MainActivity extends AppCompatActivity {
 //            default:
 //                return super.onOptionsItemSelected(item);
 //        }
+    }
+
+    private void signOut() {
+        mAuth.signOut();
+        Toast.makeText(MainActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 
     private void setLocal(String langCode){

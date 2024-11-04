@@ -11,4 +11,13 @@
     <string name="exclanatory">Exclanatory</string>
     <string name="delete">Delete</string>
     <string name="saved_words">Saved Words</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="language">Language</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>

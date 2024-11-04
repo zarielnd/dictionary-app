@@ -7,18 +7,23 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/menu_language"
-        android:title="Language"
+        android:title="@string/language"
         android:icon="@drawable/icons8_earth_50">
         <menu>
 
             <item
                 android:id="@+id/menu_language_english"
-                android:title="English"
+                android:title="@string/english"
                 android:icon="@drawable/icons8_english_48"></item>
             <item
                 android:id="@+id/menu_language_vietnamese"
-                android:title="Vietnamese"
+                android:title="@string/vietnamese"
                 android:icon="@drawable/icons8_vietnam_48"></item>
         </menu>
     </item>
+    <item
+        android:id="@+id/menu_sign_out"
+        android:title="@string/sign_out"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 </menu>
