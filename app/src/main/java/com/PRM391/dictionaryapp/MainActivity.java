@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -27,6 +28,7 @@ import com.PRM391.dictionaryapp.Model.APIResponse;
 import com.PRM391.dictionaryapp.Model.SavedWord;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    private FirebaseFirestore db;
     private static final String PREF_SAVED_WORDS = "saved_words";
     private final Gson gson = new Gson();
     private FirebaseAuth mAuth;
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         bindingView();
         bindingAction();
@@ -220,16 +224,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveWordPair(String englishWord, String vietnameseWord) {
-        SharedPreferences prefs = getSharedPreferences(PREF_SAVED_WORDS, MODE_PRIVATE);
-        String wordsJson = prefs.getString("word_pairs", "[]");
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        SavedWord word = new SavedWord(englishWord, vietnameseWord);
 
-        Type type = new TypeToken<ArrayList<SavedWord>>(){}.getType();
-        ArrayList<SavedWord> savedWords = gson.fromJson(wordsJson, type);
-
-        savedWords.add(new SavedWord(englishWord, vietnameseWord));
-        String updatedJson = gson.toJson(savedWords);
-
-        prefs.edit().putString("word_pairs", updatedJson).apply();
-        Toast.makeText(this, "Word pair saved successfully!", Toast.LENGTH_SHORT).show();
+        db.collection("users").document(userId)
+                .collection("saved_words")
+                .add(word)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "Word saved successfully!", Toast.LENGTH_SHORT).show();
+                });
     }
 }

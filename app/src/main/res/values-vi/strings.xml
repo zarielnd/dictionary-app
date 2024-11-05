@@ -10,4 +10,16 @@
     <string name="search_words">Tìm từ..</string>
     <string name="no_example_avaliable"> Không có ví dụ</string>
     <string name="exclanatory">Từ loại:</string>
+    <string name="saved_words">Từ Đã Lưu</string>
+    <string name="save_word">Lưu Từ</string>
+    <string name="delete">Xóa</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="sign_out">Đăng xuất</string>
+    <string name="already_have_an_account_login">Đã có tài khoản? Đăng nhập</string>
+    <string name="register">Đăng ký</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="email">Email</string>
+    <string name="password">Mật Khẩu</string>
 </resources>

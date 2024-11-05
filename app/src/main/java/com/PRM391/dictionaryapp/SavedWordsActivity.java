@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.PRM391.dictionaryapp.Adapter.SavedWordsAdapter;
 import com.PRM391.dictionaryapp.Model.SavedWord;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class SavedWordsActivity extends AppCompatActivity implements SavedWordsAdapter.OnWordClickListener {
+    private FirebaseFirestore db;
     private RecyclerView recyclerView;
     private SavedWordsAdapter adapter;
     private ArrayList<SavedWord> savedWords;
@@ -31,6 +36,8 @@ public class SavedWordsActivity extends AppCompatActivity implements SavedWordsA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_words);
+        db = FirebaseFirestore.getInstance();
+        savedWords = new ArrayList<>();
 
         // Set title and back button using the default ActionBar
         if (getSupportActionBar() != null) {
@@ -40,17 +47,28 @@ public class SavedWordsActivity extends AppCompatActivity implements SavedWordsA
 
         recyclerView = findViewById(R.id.recyclerViewSavedWords);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SavedWordsAdapter(savedWords, this);
+        recyclerView.setAdapter(adapter);
+
         loadSavedWords();
 
     }
     private void loadSavedWords() {
-        SharedPreferences prefs = getSharedPreferences("saved_words", MODE_PRIVATE);
-        String wordsJson = prefs.getString("word_pairs", "[]");
-        Type type = new TypeToken<ArrayList<SavedWord>>(){}.getType();
-        savedWords = gson.fromJson(wordsJson, type);
-
-        adapter = new SavedWordsAdapter(savedWords, this);
-        recyclerView.setAdapter(adapter);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("users").document(userId)
+                .collection("saved_words")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        return;
+                    }
+                    savedWords.clear();
+                    for (DocumentSnapshot doc : value.getDocuments()) {
+                        SavedWord word = doc.toObject(SavedWord.class);
+                        savedWords.add(word);
+                    }
+                    adapter.notifyDataSetChanged();
+                });
     }
 
     @Override
@@ -62,13 +80,11 @@ public class SavedWordsActivity extends AppCompatActivity implements SavedWordsA
 
     @Override
     public void onDeleteClick(SavedWord word, int position) {
-        savedWords.remove(position);
-        adapter.notifyItemRemoved(position);
-
-        // Save updated list
-        SharedPreferences prefs = getSharedPreferences("saved_words", MODE_PRIVATE);
-        String updatedJson = gson.toJson(savedWords);
-        prefs.edit().putString("word_pairs", updatedJson).apply();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.collection("users").document(userId)
+                .collection("saved_words")
+                .document(word.getId())
+                .delete();
     }
 
     @Override
